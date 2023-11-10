@@ -1,15 +1,4 @@
 import numpy as np
-# import keras.backend.tensorflow_backend as backend
-# from keras.models import Sequential
-# from keras.layers import Dense, Dropout, Conv2D, MaxPooling2D, Activation, Flatten
-# from keras.optimizers import Adam
-# from keras.callbacks import TensorBoard
-# import tensorflow as tf
-# from collections import deque
-# import time
-# import random
-# from tqdm import tqdm
-# import os
 from PIL import Image
 import cv2
 import random
@@ -35,6 +24,27 @@ class Cube:
 					'R': (0, 0, 255),
 					'W': (255, 255, 255)
 				}
+
+		self.color_node_dic = {
+					'O': 0,
+					'B': 1,
+					'Y': 2,
+					'G': 3,
+					'R': 4,
+					'W': 5		
+		}
+
+		self.node_orientation = [[0 for i in range(6)] for j in range(24)]
+		self.update_node_orientation()
+
+
+	def update_node_orientation(self):
+
+		self.node_orientation = [[0 for i in range(6)] for j in range(24)]
+
+		for i in enumerate(self.orientation):
+			color_position = self.color_node_dic[i[1]]
+			self.node_orientation[i[0]][color_position] = 1
 
 	def render(self):
 		img = self.get_image()
@@ -90,7 +100,6 @@ class Cube:
 
 		return lst
 
-
 	def move_R(self):
 		a = self.orientation[1]
 		self.orientation[1] = self.orientation[3]
@@ -101,6 +110,8 @@ class Cube:
 		self.orientation[19] = self.orientation[21]
 		self.orientation[21] = self.orientation[23]
 		self.orientation[23] = a
+
+		self.update_node_orientation()
 
 	def move_Rp(self):
 		a = self.orientation[1]
@@ -113,6 +124,8 @@ class Cube:
 		self.orientation[7] = self.orientation[3]
 		self.orientation[3] = a
 
+		self.update_node_orientation()
+
 	def move_L(self):
 		a = self.orientation[0]
 		self.orientation[0] = self.orientation[2]
@@ -124,6 +137,8 @@ class Cube:
 		self.orientation[20] = self.orientation[22]
 		self.orientation[22] = a
 
+		self.update_node_orientation()
+
 	def move_Lp(self):
 		a = self.orientation[0]
 		self.orientation[0] = self.orientation[22]
@@ -134,6 +149,8 @@ class Cube:
 		self.orientation[12] = self.orientation[6]
 		self.orientation[6] = self.orientation[2]
 		self.orientation[2] = a
+
+		self.update_node_orientation()
 
 	def move_U(self):
 
@@ -155,6 +172,8 @@ class Cube:
 		self.orientation[16] = self.orientation[5]
 		self.orientation[5] = a
 
+		self.update_node_orientation()
+
 	def move_Up(self):
 
 		a = self.orientation[6]
@@ -174,6 +193,8 @@ class Cube:
 		self.orientation[5] = self.orientation[16]
 		self.orientation[16] = self.orientation[14]
 		self.orientation[14] = a
+
+		self.update_node_orientation()
 
 	def move_B(self):
 
@@ -195,6 +216,8 @@ class Cube:
 		self.orientation[18] = self.orientation[4]
 		self.orientation[4] = a
 
+		self.update_node_orientation()
+
 	def move_Bp(self):
 
 		a = self.orientation[21]
@@ -214,6 +237,8 @@ class Cube:
 		self.orientation[4] = self.orientation[18]
 		self.orientation[18] = self.orientation[15]
 		self.orientation[15] = a
+
+		self.update_node_orientation()
 
 	def move_F(self):
 
@@ -235,6 +260,8 @@ class Cube:
 		self.orientation[21] = self.orientation[14]
 		self.orientation[14] = a
 
+		self.update_node_orientation()
+
 	def move_Fp(self):
 
 		a = self.orientation[17]
@@ -254,6 +281,8 @@ class Cube:
 		self.orientation[14] = self.orientation[21]
 		self.orientation[21] = self.orientation[10]
 		self.orientation[10] = a
+
+		self.update_node_orientation()
 
 	def move_O(self):
 
@@ -275,6 +304,8 @@ class Cube:
 		self.orientation[23] = self.orientation[8]
 		self.orientation[8] = a
 
+		self.update_node_orientation()
+
 	def move_Op(self):
 
 		a = self.orientation[3]
@@ -294,6 +325,8 @@ class Cube:
 		self.orientation[8] = self.orientation[23]
 		self.orientation[23] = self.orientation[4]
 		self.orientation[4] = a
+
+		self.update_node_orientation()
 
 	def move_random(self, num):
 		if num == 0:
@@ -322,17 +355,3 @@ class Cube:
 			self.move_Op()
 
 
-
-
-c = Cube()
-
-print(c.orientation)
-c.render()
-
-for i in range(100):
-	c.move_random(random.randint(0,11))
-
-
-
-print(c.orientation)
-c.render()
